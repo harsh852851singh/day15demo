@@ -46,8 +46,46 @@ app.get("/api/students", async(req,res) =>{
     }
 });
 
+app.put("/api/students/:id",async (req,res) =>{
+    try{
+        const {id} = req.params;
+        const student =await Student.findByIdAndUpdate(id,req.body);
+        if(!student){
+            return res.status(401).json({
+                success:false,
+                message:"student not found"
+            })
+        }
+        res.json({
+            message:"record are updated"
+        })
+    }
+    catch(err){
+        console.log("unabl to update",err);
+    }
+});
+
+app.delete("/api/students/:id", async (req,res)=>{
+    try{
+        const {id} =req.params;
+        const student =await Student.findByIdAndDelete(id);
+        if(!student){
+            return res.status(401).json({
+                message:" invalid student id "
+            });
+        }
+        res.json({
+            message:"record are deleted"
+        });
+    }
+    catch(err) {
+        console.log("unable to delete",err);
+    }
+})
+
 
 const PORT = process.env.PORT || 5001;
+ 
 app.listen(PORT,()=>{
     console.log("Server connnected at"+PORT);
 });
